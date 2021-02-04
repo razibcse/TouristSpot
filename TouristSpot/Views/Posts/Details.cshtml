@@ -1,0 +1,78 @@
+﻿@model Models.Post
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var id = ViewData["id"];
+}
+
+<div class="row">
+    <div class="col-md-4">
+        <form>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Title" class="control-label"></label>
+                <input asp-for="Title" class="form-control" disabled/>
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" disabled/>
+
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Country" class="control-label"></label>
+                <input asp-for="Country" class="form-control" disabled/>
+                <span asp-validation-for="Country" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="City" class="control-label"></label>
+                <input asp-for="City" class="form-control" disabled/>
+                <span asp-validation-for="City" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DateTime" class="control-label"></label>
+                <input asp-for="DateTime" class="form-control" disabled/>
+                <span asp-validation-for="DateTime" class="text-danger"></span>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<hr>
+
+<div class="card">
+    <div class="row d-flex media-body">
+        @foreach (var image in Model.Images)
+        {
+            <img src="~/images/@image.FilePath" height="340" width="420" />
+        }
+        @foreach (var video in Model.Videos)
+        {
+            <video width="380" height="270" controls autoplay muted>
+                <source src="~/videos/@video.FilePath" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        }
+
+    </div>
+</div>
+
+<hr>
+
+
+<div>
+    @if ((string)id == Model.OwnerID)
+    {
+         <p>
+             <a asp-action="Edit" class="btn btn-info" aria-hidden="true"
+                asp-route-id="@Model.Id">Edit</a> | 
+             <a asp-action="Delete" class="btn btn-danger" aria-hidden="true"
+                asp-route-id="@Model.Id">Delete</a>
+         </p>
+    }
+    <a asp-action="Index" class="btn btn-primary" aria-hidden="true">Back to List</a>
+
+</div>

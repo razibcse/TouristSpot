@@ -1,0 +1,194 @@
+﻿@model IEnumerable<TouristSpot.Models.ViewModels.IndexViewModel>
+
+@using Microsoft.AspNetCore.Identity
+@using Models
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var userId="";
+    if (SignInManager.IsSignedIn(User))
+    {
+        userId = UserManager.GetUserAsync(User).Result.Id;
+    }
+
+}
+<p class="float-right">
+    <a asp-action="Create"><h5>Create New</h5></a>
+</p>
+
+@foreach (var post in Model)
+{
+    <div class="card">
+        <div class="card-body">
+            <!-- Page Content -->
+            <!-- Title -->
+            <h1 class="mt-4 card-title">
+                <a asp-action="Details" asp-route-id="@post.PostId">@post.Title</a>
+            </h1>
+
+            <!-- Author -->
+            <p class="lead">
+                by
+                <a href="#">
+                    <img style="width:40px;height:40px; object-fit:cover; border-radius:30px"
+                         src="~/images/@post.Avatar" alt="No image">
+                    @post.FullName
+                </a>
+            </p>
+
+            <hr>
+            <div class="row">
+                <div class="col-sm-4">
+                    <p>Posted on @post.DateTime</p>
+                </div>
+                <div class="col-sm-4">
+                    <p>Country: @post.Country</p>
+                </div>
+                <div class="col-sm-4">
+                    <p>City: @post.City</p>
+                </div>
+            </div>
+            <!-- Date/Time -->
+
+            <hr>
+
+            <!-- Preview Image -->
+            <div class="card text-center">
+                <div class="row d-flex media-body text-center">
+                    @foreach (var image in post.ImagePath)
+                    {
+                        <img src="~/images/@image" height="240" width="320" />
+                    }
+                    @foreach (var video in post.VideoPath)
+                    {
+                        <video width="340" height="250" controls autoplay muted>
+                            <source src="~/videos/@video" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    }
+
+                </div>
+            </div>
+
+            <hr>
+
+            <!-- Post Content -->
+            <p class="card-text">
+                @post.Description
+            </p>
+
+            <hr>
+
+            <div class="row">
+                <div class="col-sm-2">
+                    <form method="post" asp-controller="Likes" asp-action="AddLike">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input type="hidden" name="PostId" value="@post.PostId" />
+                        <input type="hidden" name="UserId" value="@userId" />
+                        <div class="form-group row">
+                            <button type="submit" class="btn btn-light" aria-hidden="true">Like</button>
+                            <button class="btn btn-light" aria-hidden="true">@post.Like</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="col-sm-5">
+                    <div class="row">
+                        <form asp-controller="Comments" asp-action="AddComment" method="post">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="form-group">
+                                <input name="PostId" type="hidden" class="form-control" value="@post.PostId" />
+                            </div>
+                            <div class="form-group row">
+                                <div class="col">
+                                    <input type="text" name="Description" class="form-control"
+                                           placeholder="Write something here..">
+                                </div>
+                                <button type="submit" class="btn btn-light" aria-hidden="true">Comment</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="row">
+                        <form asp-controller="Ratings" asp-action="AddRating" method="post">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="form-group">
+                                <input name="PostId" type="hidden" class="form-control" value="@post.PostId" />
+                            </div>
+                            <div class="row form-group">
+                                <select name="RatingValue" class="btn btn-light" aria-hidden="true">
+                                    <option value="5">
+                                        *****
+                                    </option>
+                                    <option value="4">
+                                        ****
+                                    </option>
+                                    <option value="3">
+                                        ***
+                                    </option>
+                                    <option value="2">
+                                        **
+                                    </option>
+                                    <option value="1">
+                                        *
+                                    </option>
+                                </select>
+                                <button type="submit" class="btn btn-light" aria-hidden="true">AddRating</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <form>
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group">
+                            <input type="hidden"
+                                   name="name" value="" />
+                            <button type="button" class="btn btn-light" aria-hidden="true">
+                                @post.AvgRating/5 (@post.TotalRatingCount)
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card">
+                @foreach (var comment in post.Comments)
+                {
+                    <div class="card-body">
+                        <div class="container">
+                            <p class="lead">
+                                <a href="#">
+                                    <img style="width:40px;height:40px; object-fit:cover; border-radius:30px"
+                                         src="~/images/@comment.Avatar" alt="No image">
+                                    @comment.FullName
+                                </a>
+                            </p>
+                            <hr>
+                            <div class="container">
+                                <p class="card-text" style="padding-left:5px">@comment.Description</p>
+                                @if (comment.ownerId == userId)
+                                {
+                                    <p>
+                                        <a asp-action="Edit" asp-controller="Comments"
+                                           asp-route-id="@comment.Id">Edit</a> |
+                                        <a asp-action="Delete" asp-controller="Comments"
+                                           asp-route-id="@comment.Id">Delete</a>
+                                    </p>
+                                }
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                }
+            </div>
+            
+        </div>
+    </div>
+    <br />
+}

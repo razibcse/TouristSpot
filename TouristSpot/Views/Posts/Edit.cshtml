@@ -1,0 +1,109 @@
+﻿@model Models.Post
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Edit</h1>
+
+<h4>Post</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit" asp-controller="Posts">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="OwnerID"/>
+            <input type="hidden" asp-for="DateTime" />
+            <div class="form-group">
+                <label asp-for="Title" class="control-label"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Country" class="control-label"></label>
+                <input asp-for="Country" class="form-control" />
+                <span asp-validation-for="Country" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="City" class="control-label"></label>
+                <input asp-for="City" class="form-control" />
+                <span asp-validation-for="City" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<form asp-action="UploadImage" asp-controller="Images" method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="Id" />
+    <div class="form-group">
+        <label name="files" class="control-label">Upload New image</label>
+        <input name="files" type="file" multiple accept="image/*" class="form-control" />
+        <span validation-for="files" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="UploadImage" class="btn btn-primary" />
+    </div>
+</form>
+
+<form asp-action="UploadVideo" asp-controller="Files" method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="Id" />
+    <div class="form-group">
+        <label name="files" class="control-label">Upload New video</label>
+        <input name="files" type="file" multiple accept="video/mp4" class="form-control" />
+        <span validation-for="files" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="UploadVideo" class="btn btn-primary" />
+    </div>
+</form>
+
+<div class="card">
+    <div class="row d-flex media-body">
+        @foreach (var image in Model.Images)
+        {
+            <form asp-action="Remove" asp-controller="Images">
+                <img src="~/images/@image.FilePath" height="340" width="420" />
+                <input type="hidden" name="Path" value="@image.FilePath" />
+                <input type="hidden" name="Id" value="@image.Id" />
+                <input type="hidden" name="PostId" value="@Model.Id" />
+                <div class="form-group">
+                    <input type="submit" value="Remove" class="btn btn-primary" />
+                </div>
+            </form>
+        }
+        @foreach (var video in Model.Videos)
+        {
+            <form asp-action="Remove" asp-controller="Files">
+                <video width="380" height="270" controls autoplay muted>
+                    <source src="~/videos/@video.FilePath" type="video/mp4">
+                </video>
+                <input type="hidden" name="Path" value="@video.FilePath" />
+                <input type="hidden" name="Id" value="@video.Id" />
+                <input type="hidden" name="PostId" value="@Model.Id" />
+                <div class="form-group">
+                    <input type="submit" value="Remove" class="btn btn-primary" />
+                </div>
+            </form>
+         }
+
+    </div>
+</div>
+
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
