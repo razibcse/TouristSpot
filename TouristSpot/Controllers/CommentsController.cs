@@ -16,7 +16,6 @@ namespace TouristSpot.Controllers
 {
     public class CommentsController : Controller
     {
-        private readonly ApplicationDbContext _context;
         private readonly IUserService userService;
         private readonly ICommentManager commentManager;
 
@@ -24,34 +23,33 @@ namespace TouristSpot.Controllers
             IUserService userService,
             ICommentManager commentManager)
         {
-            _context = context;
             this.userService = userService;
             this.commentManager = commentManager;
         }
 
         // GET: Comments
-        public async Task<IActionResult> Index()
-        {
-            return View(await _context.Comments.ToListAsync());
-        }
+        //public async Task<IActionResult> Index()
+        //{
+        //    return View(await _context.Comments.ToListAsync());
+        //}
 
         // GET: Comments/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+        //public async Task<IActionResult> Details(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            var comment = await _context.Comments
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (comment == null)
-            {
-                return NotFound();
-            }
+        //    var comment = await _context.Comments
+        //        .FirstOrDefaultAsync(m => m.Id == id);
+        //    if (comment == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            return View(comment);
-        }
+        //    return View(comment);
+        //}
 
         [Authorize]
         [HttpPost]
@@ -103,14 +101,7 @@ namespace TouristSpot.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CommentExists(comment.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    
                 }
                 return View(comment);
             }
@@ -143,9 +134,9 @@ namespace TouristSpot.Controllers
             return RedirectToAction("Index","Posts");
         }
 
-        private bool CommentExists(int id)
-        {
-            return _context.Comments.Any(e => e.Id == id);
-        }
+        //private bool CommentExists(int id)
+        //{
+        //    return _context.Comments.Any(e => e.Id == id);
+        //}
     }
 }

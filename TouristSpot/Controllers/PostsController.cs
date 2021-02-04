@@ -21,19 +21,17 @@ namespace TouristSpot.Controllers
     [Authorize]
     public class PostsController : Controller
     {
-        private readonly ApplicationDbContext _context;
         private readonly IWebHostEnvironment environment;
         private readonly IPostManager postManager;
         private readonly IUserService userService;
         private readonly UserManager<ApplicationUser> userManager;
 
-        public PostsController(ApplicationDbContext context,
+        public PostsController(
             IWebHostEnvironment environment,
             IPostManager postManager,
             IUserService userService,
             UserManager<ApplicationUser> userManager)
         {
-            _context = context;
             this.environment = environment;
             this.postManager = postManager;
             this.userService = userService;
@@ -238,14 +236,7 @@ namespace TouristSpot.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!PostExists(post.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    
                 }
             }
             return RedirectToAction("Edit", "Posts", new { id = post.Id });
@@ -283,9 +274,9 @@ namespace TouristSpot.Controllers
         }
 
 
-        private bool PostExists(int id)
-        {
-            return _context.Posts.Any(e => e.Id == id);
-        }
+        //private bool PostExists(int id)
+        //{
+        //    return _context.Posts.Any(e => e.Id == id);
+        //}
     }
 }

@@ -19,46 +19,44 @@ namespace TouristSpot.Controllers
 {
     public class ImagesController : Controller
     {
-        private readonly ApplicationDbContext _context;
         private readonly IUserService userService;
         private readonly IImageManager imageManager;
         private readonly IWebHostEnvironment environment;
 
-        public ImagesController(ApplicationDbContext context,
+        public ImagesController(
             IUserService userService,
             IImageManager imageManager,
             IWebHostEnvironment environment
             )
         {
-            _context = context;
             this.userService = userService;
             this.imageManager = imageManager;
             this.environment = environment;
         }
 
         // GET: Images
-        public async Task<IActionResult> Index()
-        {
-            return View(await _context.Images.ToListAsync());
-        }
+        //public async Task<IActionResult> Index()
+        //{
+        //    return View(await _context.Images.ToListAsync());
+        //}
 
-        // GET: Images/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+        //// GET: Images/Details/5
+        //public async Task<IActionResult> Details(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            var image = await _context.Images
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (image == null)
-            {
-                return NotFound();
-            }
+        //    var image = await _context.Images
+        //        .FirstOrDefaultAsync(m => m.Id == id);
+        //    if (image == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            return View(image);
-        }
+        //    return View(image);
+        //}
 
         [Authorize]
         [HttpPost]
@@ -99,55 +97,55 @@ namespace TouristSpot.Controllers
         }
 
         // GET: Images/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+        //public async Task<IActionResult> Edit(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            var image = await _context.Images.FindAsync(id);
-            if (image == null)
-            {
-                return NotFound();
-            }
-            return View(image);
-        }
+        //    var image = await _context.Images.FindAsync(id);
+        //    if (image == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    return View(image);
+        //}
 
         // POST: Images/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,FilePath,PostId")] Image image)
-        {
-            if (id != image.Id)
-            {
-                return NotFound();
-            }
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Edit(int id, [Bind("Id,FilePath,PostId")] Image image)
+        //{
+        //    if (id != image.Id)
+        //    {
+        //        return NotFound();
+        //    }
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(image);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ImageExists(image.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(image);
-        }
+        //    if (ModelState.IsValid)
+        //    {
+        //        try
+        //        {
+        //            _context.Update(image);
+        //            await _context.SaveChangesAsync();
+        //        }
+        //        catch (DbUpdateConcurrencyException)
+        //        {
+        //            if (!ImageExists(image.Id))
+        //            {
+        //                return NotFound();
+        //            }
+        //            else
+        //            {
+        //                throw;
+        //            }
+        //        }
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    return View(image);
+      //  }
 
         [Authorize]
         public IActionResult Remove(RemoveFile model)
@@ -176,19 +174,19 @@ namespace TouristSpot.Controllers
         }
 
         // POST: Images/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var image = await _context.Images.FindAsync(id);
-            _context.Images.Remove(image);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
+        //[HttpPost, ActionName("Delete")]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> DeleteConfirmed(int id)
+        //{
+        //    var image = await _context.Images.FindAsync(id);
+        //    _context.Images.Remove(image);
+        //    await _context.SaveChangesAsync();
+        //    return RedirectToAction(nameof(Index));
+        //}
 
-        private bool ImageExists(int id)
-        {
-            return _context.Images.Any(e => e.Id == id);
-        }
+        //private bool ImageExists(int id)
+        //{
+        //    return _context.Images.Any(e => e.Id == id);
+        //}
     }
 }
